@@ -6,6 +6,10 @@
 // struct Channel {
 //
 // }
+//
+// struct Topic {
+//
+// }
 
 #[cfg(test)]
 mod tests {
