@@ -10,6 +10,7 @@ overhead of thread-based concurrency models.
 
 ## Design Goals 
 
+* use [ipcd](https://dev.to/legolord208/programming-for-redox-os-4124) for inter-process communications (RedoxOS)
 * to support something akin to a 'simpler decentralized [Kafka](https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines)' placing the burden of queue checks on the clients for maximum scalability
 * persist all messages immediately providing configurable retention times
 * mark messages as consumed on consumption so that clients can continue on if synchronous
