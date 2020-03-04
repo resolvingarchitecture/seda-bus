@@ -22,7 +22,7 @@ exitfailure = "0.5.1"
 
 #dbus = "0.8.1"
 
-ra_traits = "0.0.1"
+ra_common = "0.0.2"
 task_runner = "0.0.1"
 
 [dev-dependencies]
