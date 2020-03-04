@@ -19,7 +19,10 @@ categories = ["command-line-utilities"]
 log = "0.4.8"
 failure = "0.1.5"
 exitfailure = "0.5.1"
+
 #dbus = "0.8.1"
+
+ra_traits = "0.0.1"
 task_runner = "0.0.1"
 
 [dev-dependencies]

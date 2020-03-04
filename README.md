@@ -16,3 +16,7 @@ overhead of thread-based concurrency models.
 * persist all messages immediately providing configurable retention times
 * mark messages as consumed on consumption so that clients can continue on if synchronous
 * eventually supporting the ability to replicate logs encrypted to other machines for backup
+
+## Functionality
+
+1. 

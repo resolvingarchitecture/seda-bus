@@ -1,15 +1,11 @@
 
-// struct Bus {
-//
-// }
-//
-// struct Channel {
-//
-// }
-//
-// struct Topic {
-//
-// }
+struct MessageBus {
+
+}
+
+struct Channel {
+
+}
 
 #[cfg(test)]
 mod tests {
