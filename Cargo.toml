@@ -21,9 +21,11 @@ failure = "0.1.5"
 exitfailure = "0.5.1"
 
 #dbus = "0.8.1"
+scheduled-thread-pool = "0.2.3"
+futures = "0.3.4"
+tokio = "0.2.13"
 
-ra_common = "0.0.2"
-task_runner = "0.0.1"
+ra_common = "0.0.4"
 
 [dev-dependencies]
 assert_cmd = "0.10"
