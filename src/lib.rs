@@ -4,7 +4,7 @@ mod seda {
     use scheduled_thread_pool::ScheduledThreadPool;
 
     struct MessageChannel {
-
+        name: String
     }
 
     /// A combination of a common data model, a common command set, and a messaging infrastructure
