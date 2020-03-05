@@ -18,7 +18,7 @@ mod seda {
     }
 
     impl MessageBus {
-        fn new() -> MessageBus {
+        fn new(name: &mut String, size: usize) -> MessageBus {
             MessageBus {
                 pool: ScheduledThreadPool::with_name( &name, size)
             }

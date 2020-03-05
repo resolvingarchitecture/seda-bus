@@ -1,8 +1,9 @@
 [![Build Status](https://travis-ci.com/resolvingarchitecture/seda-bus.svg?branch=master)](https://travis-ci.com/resolvingarchitecture/seda-bus)
 # Staged Event-Driven Architecture (SEDA) Bus
-A form of message bus where channels get their own queue and a thread pool manages
-communications between the queues using their own worker threads to avoid the high
-overhead of thread-based concurrency models.
+A form of message bus avoiding the high overhead of thread-based concurrency models where channels get their own inbound and outbound queues 
+each with a thread pool. The bus uses its own thread pool to route messages between queues. Addresses in Routes point to channel names.
+When used in conjunction with the [Service Bus](../service-bus), the service bus acts as a layer above the message bus driving
+routing based on service operations and/or other logic which results in mappings to the lower message bus address.
 
 [Crates.io](https://crates.io/crates/seda_bus)
 
@@ -19,4 +20,3 @@ overhead of thread-based concurrency models.
 
 ## Functionality
 
-1. 
