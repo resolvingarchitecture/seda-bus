@@ -1,11 +1,11 @@
 [package]
 name = "seda_bus"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["Brian Taylor <brian@resolvingarchitecture.io>"]
 license-file = "LICENSE"
 edition = "2018"
 description = "A Staged Event-Driven Architectural message bus."
-homepage = "http://resolvingarchitecture.io"
+homepage = "https://resolvingarchitecture.io"
 documentation = "https://github.com/resolvingarchitecture/seda-bus"
 repository = "https://github.com/resolvingarchitecture/seda-bus"
 publish = true
