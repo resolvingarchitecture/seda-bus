@@ -129,26 +129,26 @@ mod tests {
     #[test]
     fn bus() {
         // Setup bus and endpoints
-        let mut bus = MessageBus::new(String::from("test_bus"));
-        let consumer_a = LogConsumer::new();
-        let end_a = bus.create_endpoint(String::from("A"), consumer_a);
-        let consumer_b = LogConsumer::new();
-        let end_b = bus.create_endpoint(String::from("B"), consumer_b);
-        let consumer_c = LogConsumer::new();
-        let end_c = bus.create_endpoint(String::from("C"), consumer_c);
-        let consumer_d = LogConsumer::new();
-        let end_d = bus.create_endpoint(String::from("D"), consumer_d);
-        // Send envelopes and check
-        let env = Envelope::new();
-        let r = Route::new(
-            String::from("ServiceA"),
-            String::from("send_to_peer"),
-            String::from("A"),
-            String::from("B"),
-            String::from("A"),
-            String::from("B"));
-        env.slip.add_route(r);
-        end_a.send(env);
+        // let mut bus = MessageBus::new(String::from("test_bus"));
+        // let consumer_a = LogConsumer::new();
+        // let end_a = bus.create_endpoint(String::from("A"), consumer_a);
+        // let consumer_b = LogConsumer::new();
+        // let end_b = bus.create_endpoint(String::from("B"), consumer_b);
+        // let consumer_c = LogConsumer::new();
+        // let end_c = bus.create_endpoint(String::from("C"), consumer_c);
+        // let consumer_d = LogConsumer::new();
+        // let end_d = bus.create_endpoint(String::from("D"), consumer_d);
+        // // Send envelopes and check
+        // let env = Envelope::new();
+        // let r = Route::new(
+        //     String::from("ServiceA"),
+        //     String::from("send_to_peer"),
+        //     String::from("A"),
+        //     String::from("B"),
+        //     String::from("A"),
+        //     String::from("B"));
+        // env.slip.add_route(r);
+        // end_a.send(env);
         // assert message is in B
 
         // Route from A to B to C to D using Routes
