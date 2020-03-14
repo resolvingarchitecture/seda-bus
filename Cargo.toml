@@ -1,6 +1,6 @@
 [package]
 name = "seda_bus"
-version = "0.0.4"
+version = "0.0.6"
 authors = ["Brian Taylor <brian@resolvingarchitecture.io>"]
 license-file = "LICENSE"
 edition = "2018"
@@ -17,13 +17,13 @@ categories = ["command-line-utilities"]
 
 [dependencies]
 log = "0.4.8"
+simple_logger = "1.6.0"
+rand = "0.7.3"
 
 #dbus = "0.8.1"
-scheduled-thread-pool = "0.2.3"
-futures = "0.3.4"
-tokio = "0.2.13"
+#scheduled-thread-pool = "0.2.3"
 
-ra_common = "0.0.17"
+ra_common = "0.0.23"
 
 [dev-dependencies]
 assert_cmd = "0.10"
