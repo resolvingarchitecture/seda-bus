@@ -7,7 +7,7 @@
 pub mod bus {
 
     use log::{info};
-    use std::collections::HashMap;
+    use std::vec::Vec;
     use std::sync::mpsc::{channel, Sender, Receiver, RecvError, SendError};
     use std::thread;
     use rand::{Rng, RngCore};
@@ -83,7 +83,7 @@ pub mod bus {
         }
 
         fn receive(&mut self) -> Box<Envelope> {
-            self._out.receive()
+            self._in.receive()
         }
     }
 
@@ -101,25 +101,30 @@ pub mod bus {
 
     pub struct MessageBus {
         _running: bool,
-        _endpoints: HashMap<u64, Box<MessageEndpoint>>
+        _endpoints: Vec<Box<MessageEndpoint>>
     }
 
     impl MessageBus {
         pub fn new(name: String) -> Box<MessageBus> {
             Box::new(MessageBus {
                 _running: false,
-                _endpoints: HashMap::with_capacity(MAXIMUM_CAPACITY)
+                _endpoints: Vec::with_capacity(MAXIMUM_CAPACITY)
             })
         }
 
         pub fn create_endpoint(&mut self) -> u64 {
             let addr = rand::thread_rng().next_u64();
-            self._endpoints.insert(addr, MessageEndpoint::new(addr));
+            self._endpoints.push(MessageEndpoint::new(addr));
             return addr;
         }
 
-        pub fn endpoint(&mut self, addr: u64) -> &Box<MessageEndpoint> {
-            self._endpoints.get(&addr).unwrap()
+        pub fn endpoint(&mut self, addr: u64) -> Option<&Box<MessageEndpoint>> {
+            for endpoint in &self._endpoints {
+                if endpoint._address.eq(&addr) {
+                    return Option::Some(endpoint);
+                }
+            }
+            return None;
         }
 
         pub fn num_endpoints(&mut self) -> usize {
@@ -140,11 +145,15 @@ pub mod bus {
             // 3. Producing on each _in channel
             while self._running {
                 let endpoints = &mut self._endpoints;
-                for addr in endpoints.keys() {
-                    let ep = &mut endpoints.get(addr).unwrap();
-                    info!("endpoint: {:#?}", ep);
-                    // TODO: Unable to call receive
-                    // ep.receive();
+                for ep in endpoints {
+                    let mut env_in = Envelope::new();
+                    env_in.payload = Option::Some(String::from("Hello World"));
+                    env_in.slip.add_route(Route::new_msg_route_no_relay(ep.addr(), ep.addr()));
+                    info!("sending envelope to endpoint {:#?}", ep);
+                    ep.send(env_in);
+                    info!("receiving on endpoint: {:#?}", ep);
+                    let env_out = &mut ep.receive();
+                    info!("received envelope: {:#?}", env_out);
                 }
                 self._running = false;
             }
