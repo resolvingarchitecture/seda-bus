@@ -78,12 +78,12 @@ pub mod bus {
             self._address
         }
 
-        fn send(&mut self, env: Box<Envelope>) {
-            self._in.send(env);
+        fn receive(&mut self) -> Box<Envelope> {
+            self._out.receive()
         }
 
-        fn receive(&mut self) -> Box<Envelope> {
-            self._in.receive()
+        fn send(&mut self, env: Box<Envelope>) {
+            self._in.send(env);
         }
     }
 
@@ -186,7 +186,7 @@ pub mod bus {
 pub mod tests {
 
     use super::*;
-    use crate::seda::{MessageBus, MessageEndpoint};
+    use crate::lib::{MessageBus, MessageEndpoint};
     use ra_common::{LogConsumer, Envelope, Route, Producer, Consumer, LifeCycle};
 
     #[test]
