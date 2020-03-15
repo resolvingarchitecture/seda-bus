@@ -19,5 +19,6 @@ fn main() {
     let d_id = bus.create_endpoint();
     let mut end_d = bus.endpoint(d_id);
     bus.start();
+    // seda::bus::run();
     trace!("SEDA Bus Daemon Stopped.");
 }

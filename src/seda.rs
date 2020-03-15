@@ -16,7 +16,16 @@ pub mod bus {
 
     const MAXIMUM_CAPACITY: usize = 10;
 
+    // pub fn run() {
+    //     let running = false;
+    //     let endpoints = HashMap::with_capacity(MAXIMUM_CAPACITY);
+    //
+    //
+    //     info!("Called run.");
+    // }
+
     /// A Channel with Sender and Receiver
+    #[derive(Debug)]
     struct MessageChannel {
         _accepting: bool,
         _tx: Sender<Box<Envelope>>,
@@ -49,6 +58,7 @@ pub mod bus {
     }
 
     /// An address on the network with its inbound and outbound channels.
+    #[derive(Debug)]
     pub struct MessageEndpoint {
         _address: u64,
         _in: Box<MessageChannel>,
@@ -64,8 +74,16 @@ pub mod bus {
             })
         }
 
-        pub fn addr(&mut self) -> u64 {
+        pub fn addr(&self) -> u64 {
             self._address
+        }
+
+        fn send(&mut self, env: Box<Envelope>) {
+            self._in.send(env);
+        }
+
+        fn receive(&mut self) -> Box<Envelope> {
+            self._out.receive()
         }
     }
 
@@ -112,18 +130,25 @@ pub mod bus {
 
     impl LifeCycle for MessageBus {
         fn start(&mut self) {
-            self._running = true;
+            info!("{}","SEDA MessageBus starting...");
             info!("{} Endpoints", &self._endpoints.len());
-            for (key, value) in &self._endpoints {
-                info!("{}, {}", key, value._address);
-            }
+            self._running = true;
+            info!("{}","SEDA MessageBus running...");
             // Use current thread with asynch support to loop through each endpoint checking for messages in its _out channel
             // 1. Consume on each Endpoint's _out channel
             // 2. Route when envelopes shows up grabbing channel based on the slip route's destination address
             // 3. Producing on each _in channel
-            // while self._running {
-            //
-            // }
+            while self._running {
+                let endpoints = &mut self._endpoints;
+                for addr in endpoints.keys() {
+                    let ep = &mut endpoints.get(addr).unwrap();
+                    info!("endpoint: {:#?}", ep);
+                    // TODO: Unable to call receive
+                    // ep.receive();
+                }
+                self._running = false;
+            }
+            info!("{}","SEDA MessageBus stopped");
         }
 
         fn restart(&mut self) {
