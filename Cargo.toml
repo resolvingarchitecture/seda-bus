@@ -4,14 +4,13 @@ version = "0.0.10"
 authors = ["Brian Taylor <brian@resolvingarchitecture.io>"]
 license-file = "LICENSE"
 edition = "2018"
-description = "A Staged Event-Driven Architectural message bus."
+description = "A Staged Event-Driven Architectural message bus"
 homepage = "https://resolvingarchitecture.io"
 documentation = "https://github.com/resolvingarchitecture/seda-bus"
-repository = "https://github.com/resolvingarchitecture/seda-bus"
+repository = "https://github.com/resolvingarchitecture/seda-bus.git"
 publish = true
 readme = "README.md"
 keywords = ["seda","seda-bus","message-bus"]
-categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -19,11 +18,12 @@ categories = ["command-line-utilities"]
 log = "0.4.8"
 simple_logger = "1.6.0"
 rand = "0.7.3"
+futures = "0.3.4"
 
 #dbus = "0.8.1"
 #scheduled-thread-pool = "0.2.3"
 
-ra_common = "0.0.25"
+ra_common = "0.0.28"
 
 [dev-dependencies]
 assert_cmd = "0.10"

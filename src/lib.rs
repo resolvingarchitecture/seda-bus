@@ -8,11 +8,14 @@ pub mod bus {
 
     use log::{info};
     use std::vec::Vec;
-    use std::sync::mpsc::{channel, Sender, Receiver, RecvError, SendError};
+    // use std::sync::mpsc::{channel, Sender, Receiver, RecvError, SendError};
     use std::thread;
     use rand::{Rng, RngCore};
 
+    use futures::channel::mpsc::{channel, Sender, Receiver, TryRecvError, TrySendError};
+
     use ra_common::{Envelope, Route, LifeCycle, Consumer, Producer, Router};
+    use ra_common::util::wait;
 
     const MAXIMUM_CAPACITY: usize = 10;
 
@@ -34,7 +37,7 @@ pub mod bus {
 
     impl MessageChannel {
         fn new() -> Box<MessageChannel> {
-            let (tx, rx) = channel();
+            let (tx, rx) = channel(10);
             Box::new(MessageChannel {
                 _accepting: true,
                 _tx: tx,
@@ -46,7 +49,10 @@ pub mod bus {
     impl Producer for MessageChannel {
         fn send(&mut self, env: Box<Envelope>) {
             if self._accepting {
-                self._tx.send(env).unwrap();
+                loop {
+                    info!("{}","Sending...");
+                    wait::wait_a_ms(1000);
+                }
             }
         }
     }
@@ -146,6 +152,7 @@ pub mod bus {
             while self._running {
                 let endpoints = &mut self._endpoints;
                 for ep in endpoints {
+                    // TODO: Replace this test code with asynchronous receiving on all endpoints preferably on the same thread, but a thread per endpoint if necessary to avoid blocking
                     let mut env_in = Envelope::new();
                     env_in.payload = Option::Some(String::from("Hello World"));
                     env_in.slip.add_route(Route::new_msg_route_no_relay(ep.addr(), ep.addr()));
