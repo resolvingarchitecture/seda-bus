@@ -89,7 +89,7 @@ pub mod bus {
         }
 
         fn send(&mut self, env: Box<Envelope>) {
-            self._in.send(env);
+            self._out.send(env);
         }
     }
 
