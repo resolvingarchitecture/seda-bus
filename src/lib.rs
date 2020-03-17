@@ -8,11 +8,11 @@ pub mod bus {
 
     use log::{info};
     use std::vec::Vec;
-    // use std::sync::mpsc::{channel, Sender, Receiver, RecvError, SendError};
+    use std::sync::mpsc::{channel, Sender, Receiver, RecvError, SendError};
     use std::thread;
     use rand::{Rng, RngCore};
 
-    use futures::channel::mpsc::{channel, Sender, Receiver, TryRecvError, TrySendError};
+    // use futures::channel::mpsc::{channel, Sender, Receiver, TryRecvError, TrySendError};
 
     use ra_common::{Envelope, Route, LifeCycle, Consumer, Producer, Router};
     use ra_common::util::wait;
@@ -37,7 +37,7 @@ pub mod bus {
 
     impl MessageChannel {
         fn new() -> Box<MessageChannel> {
-            let (tx, rx) = channel(10);
+            let (tx, rx) = channel();
             Box::new(MessageChannel {
                 _accepting: true,
                 _tx: tx,
@@ -101,7 +101,7 @@ pub mod bus {
 
     impl Consumer for MessageEndpoint {
         fn receive(&mut self) -> Box<Envelope> {
-            self._in.receive()
+            self._out.receive()
         }
     }
 
