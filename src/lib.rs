@@ -49,10 +49,11 @@ pub mod bus {
     impl Producer for MessageChannel {
         fn send(&mut self, env: Box<Envelope>) {
             if self._accepting {
-                loop {
-                    info!("{}","Sending...");
-                    wait::wait_a_ms(1000);
-                }
+                // loop {
+                //     info!("{}","Sending...");
+                    // wait::wait_a_ms(1000);
+                // }
+                self._tx.send(env).unwrap();
             }
         }
     }
