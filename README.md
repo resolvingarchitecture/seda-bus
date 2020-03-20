@@ -22,7 +22,15 @@ logic which results in mappings to the lower message bus address.
 
 ## Functionality
 
-1. Start Message Bus up with a name.
-    1. Message bus instance creates a thread pool with Max Capacity of threads.
+### lib.rs
+1. Start Message Bus up with a name - Message bus instance creates a thread pool with Max Capacity of threads.
 2. Create Endpoints as needed using Message Bus.
+3. Start Message Bus
+
+### main.rs
+1. cargo install seda_bus
+2. copy seda_bus file to: /etc/init.d/seda_bus
+3. chmod +x /etc/init.d/seda_bus -v
+4. service seda_bus start
+
    
