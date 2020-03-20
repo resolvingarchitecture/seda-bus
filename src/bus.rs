@@ -49,22 +49,19 @@ impl LifeCycle for MessageBus {
         info!("{} Endpoints", &self._endpoints.len());
         self._running = true;
         info!("{}","SEDA MessageBus running...");
-        // Use current thread with asynch support to loop through each endpoint checking for messages in its _out channel
-        // 1. Consume on each Endpoint's _out channel
-        // 2. Route when envelopes shows up grabbing channel based on the slip route's destination address
-        // 3. Producing on each _in channel
         while self._running {
             let endpoints = &mut self._endpoints;
-            for ep in endpoints {
-                // TODO: Replace this test code with asynchronous receiving on all endpoints preferably on the same thread, but a thread per endpoint if necessary to avoid blocking
-                let mut env_in = Envelope::new();
-                env_in.payload = Option::Some(String::from("Hello World"));
-                env_in.slip.add_route(Route::new_msg_route_no_relay(ep.addr(), ep.addr()));
-                info!("sending envelope to endpoint {:#?}", ep);
-                ep.send(env_in);
-                info!("receiving on endpoint: {:#?}", ep);
-                let env_out = &mut ep.receive();
-                info!("received envelope: {:#?}", env_out);
+            for end_in in endpoints {
+                thread::spawn(move || {
+                    while self._running {
+                        info!("receiving on endpoint: {:#?}", end_in);
+                        let env_out = end_in.receive();
+                        info!("received envelope: {:#?}", env_out);
+                        let route = env_out.slip.current_route().unwrap();
+                        let end_out = &mut self.endpoint(route._dest).unwrap();
+                        end_out.send(env_out);
+                    }
+                });
             }
             self._running = false;
         }
