@@ -55,6 +55,29 @@ impl MessageChannel {
     }
 }
 
+pub struct Router {
+    _send_1: Sender<String>,
+    _send_2: Sender<String>
+}
+
+impl Router {
+    pub fn new(send_1: Sender<String>, send_2: Sender<String>) -> Box<Router> {
+        Box::new(Router {
+            _send_1: send_1,
+            _send_2: send_2
+        })
+    }
+    pub fn route(&mut self, env: Box<Envelope>) {
+        if env._to_addr == 1 {
+            self._send_1.send(env._msg);
+        } else if env._to_addr == 2 {
+            self._send_2.send(env._msg);
+        } else {
+            warn!("address {} has no channel",env._to_addr);
+        }
+    }
+}
+
 fn main() {
     simple_logger::init().unwrap();
     trace!("Starting SEDA Bus...");
@@ -69,9 +92,17 @@ fn main() {
     let mut rec_2 = ch_2._rx;
     let mut send_2 = ch_2._tx;
 
+    let mut r = Router::new(send_1, send_2);
+
     for n in 1..10 {
         let env = Envelope::new(2, format!("Hello World 2: {}",n));
-        send_2.send(env._msg);
+        // send_2.send(env._msg);
+        r.route(env);
+    }
+    for n in 1..10 {
+        let env = Envelope::new(1, format!("Hello World 1: {}",n));
+        // send_1.send(env._msg);
+        r.route(env);
     }
     thread::spawn(move || {
         loop {
@@ -89,18 +120,16 @@ fn main() {
             }
         }
     });
-    for n in 1..10 {
+    for n in 10..20 {
         let env = Envelope::new(1, format!("Hello World 1: {}",n));
-        send_1.send(env._msg);
+        // send_1.send(env._msg);
+        r.route(env);
     }
     thread::sleep(Duration::from_secs(1));
     for n in 10..20 {
-        let env = Envelope::new(1, format!("Hello World 1: {}",n));
-        send_1.send(env._msg);
-    }
-    for n in 10..20 {
         let env = Envelope::new(2, format!("Hello World 2: {}",n));
-        send_2.send(env._msg);
+        // send_2.send(env._msg);
+        r.route(env);
     }
 
     thread::sleep(Duration::from_secs(1));
