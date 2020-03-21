@@ -7,6 +7,20 @@ use std::collections::HashMap;
 use std::thread;
 use std::time::Duration;
 
+pub struct Envelope {
+    _to_addr: u64,
+    _msg: String
+}
+
+impl Envelope {
+    pub fn new(to_addr: u64, msg: String) -> Box<Envelope> {
+        Box::new(Envelope {
+            _to_addr: to_addr,
+            _msg: msg
+        })
+    }
+}
+
 pub struct Consumer {
     _id: u64
 }
@@ -44,6 +58,7 @@ impl MessageChannel {
 fn main() {
     simple_logger::init().unwrap();
     trace!("Starting SEDA Bus...");
+
     let mut c_1 = Consumer::new(1);
     let mut ch_1 = MessageChannel::new(1);
     let mut rec_1 = ch_1._rx;
@@ -55,7 +70,8 @@ fn main() {
     let mut send_2 = ch_2._tx;
 
     for n in 1..10 {
-        send_2.send(format!("Hello World 2: {}",n));
+        let env = Envelope::new(2, format!("Hello World 2: {}",n));
+        send_2.send(env._msg);
     }
     thread::spawn(move || {
         loop {
@@ -74,15 +90,19 @@ fn main() {
         }
     });
     for n in 1..10 {
-        send_1.send(format!("Hello World 1: {}",n));
+        let env = Envelope::new(1, format!("Hello World 1: {}",n));
+        send_1.send(env._msg);
     }
     thread::sleep(Duration::from_secs(1));
     for n in 10..20 {
-        send_1.send(format!("Hello World 1: {}",n));
+        let env = Envelope::new(1, format!("Hello World 1: {}",n));
+        send_1.send(env._msg);
     }
     for n in 10..20 {
-        send_2.send(format!("Hello World 2: {}",n));
+        let env = Envelope::new(2, format!("Hello World 2: {}",n));
+        send_2.send(env._msg);
     }
+
     thread::sleep(Duration::from_secs(1));
     trace!("SED Bus Stopped.");
 }
