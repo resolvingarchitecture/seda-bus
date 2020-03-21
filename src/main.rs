@@ -8,31 +8,33 @@ use std::thread;
 use std::time::Duration;
 
 pub struct Consumer {
-    _name: String
+    _id: u64
 }
 
 impl Consumer {
-    pub fn new(name: String) -> Box<Consumer> {
+    pub fn new(id: u64) -> Box<Consumer> {
         Box::new(Consumer {
-            _name: name
+            _id: id
         })
     }
     pub fn receive(&self, msg: String) {
-        info!("{}: {}",self._name, msg);
+        info!("Consumer {}: {}",self._id, msg);
     }
 }
 
 pub struct MessageChannel {
     pub _accepting: bool,
+    pub _addr: u64,
     pub _tx: Sender<String>,
     pub _rx: Receiver<String>
 }
 
 impl MessageChannel {
-    pub fn new() -> Box<MessageChannel> {
+    pub fn new(addr: u64) -> Box<MessageChannel> {
         let (tx, rx) = channel();
         Box::new(MessageChannel {
             _accepting: true,
+            _addr: addr,
             _tx: tx,
             _rx: rx
         })
@@ -42,10 +44,10 @@ impl MessageChannel {
 fn main() {
     simple_logger::init().unwrap();
     trace!("Starting SEDA Bus...");
-    let mut c_1 = Consumer::new(String::from("Consumer 1"));
-    let mut c_2 = Consumer::new(String::from("Consumer 2"));
-    let mut ch_1 = MessageChannel::new();
-    let mut ch_2 = MessageChannel::new();
+    let mut c_1 = Consumer::new(1);
+    let mut c_2 = Consumer::new(2);
+    let mut ch_1 = MessageChannel::new(1);
+    let mut ch_2 = MessageChannel::new(2);
     let mut rec_1 = ch_1._rx;
     let mut send_1 = ch_1._tx;
     let mut rec_2 = ch_2._rx;
