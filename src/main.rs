@@ -45,12 +45,11 @@ fn main() {
     simple_logger::init().unwrap();
     trace!("Starting SEDA Bus...");
     let mut c_1 = Consumer::new(1);
-    let mut c_2 = Consumer::new(2);
-
     let mut ch_1 = MessageChannel::new(1);
     let mut rec_1 = ch_1._rx;
     let mut send_1 = ch_1._tx;
 
+    let mut c_2 = Consumer::new(2);
     let mut ch_2 = MessageChannel::new(2);
     let mut rec_2 = ch_2._rx;
     let mut send_2 = ch_2._tx;
