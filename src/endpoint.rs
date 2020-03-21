@@ -21,12 +21,12 @@ impl MessageEndpoint {
         self._address
     }
 
-    pub fn receive(&mut self) -> Box<Envelope> {
-        self._out.receive()
-    }
-
     pub fn send(&mut self, env: Box<Envelope>) {
         self._out.send(env);
+    }
+
+    pub fn receive(&mut self) -> Box<Envelope> {
+        self._out.receive()
     }
 }
 

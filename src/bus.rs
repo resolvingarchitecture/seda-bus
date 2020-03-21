@@ -1,7 +1,8 @@
-use log::{info};
+use log::{info,warn};
 use std::vec::Vec;
-use std::thread;
-use rand::{Rng, RngCore};
+use rand::{RngCore};
+use futures::{executor, Future};
+
 use crate::endpoint::MessageEndpoint;
 use ra_common::models::{Consumer,Envelope,LifeCycle,Producer,Route};
 
@@ -15,7 +16,7 @@ pub struct MessageBus {
 }
 
 impl MessageBus {
-    pub fn new(name: String) -> Box<MessageBus> {
+    pub fn new() -> Box<MessageBus> {
         Box::new(MessageBus {
             _running: false,
             _endpoints: Vec::with_capacity(MAXIMUM_CAPACITY)
@@ -28,10 +29,10 @@ impl MessageBus {
         return addr;
     }
 
-    pub fn endpoint(&mut self, addr: u64) -> Option<&Box<MessageEndpoint>> {
-        for endpoint in &self._endpoints {
+    pub fn endpoint(&mut self, addr: u64) -> Option<&mut Box<MessageEndpoint>> {
+        for endpoint in &mut self._endpoints {
             if endpoint.addr().eq(&addr) {
-                return Option::Some(endpoint);
+                return Some(endpoint);
             }
         }
         return None;
@@ -46,24 +47,21 @@ impl MessageBus {
 impl LifeCycle for MessageBus {
     fn start(&mut self) {
         info!("{}","SEDA MessageBus starting...");
-        info!("{} Endpoints", &self._endpoints.len());
+        info!("{} Endpoints", self._endpoints.len());
         self._running = true;
-        info!("{}","SEDA MessageBus running...");
-        while self._running {
-            let endpoints = &mut self._endpoints;
-            for end_in in endpoints {
-                thread::spawn(move || {
-                    while self._running {
-                        info!("receiving on endpoint: {:#?}", end_in);
-                        let env_out = end_in.receive();
-                        info!("received envelope: {:#?}", env_out);
-                        let route = env_out.slip.current_route().unwrap();
-                        let end_out = &mut self.endpoint(route._dest).unwrap();
-                        end_out.send(env_out);
-                    }
-                });
-            }
-            self._running = false;
+        info!("{}","SEDA MessageBus initializing...");
+        for end_in in &mut self._endpoints {
+            info!("receiving on endpoint: {:#?}", end_in);
+            let env_out = end_in.receive();
+            info!("received envelope: {:#?}", env_out);
+            let route = env_out.slip.current_route().unwrap();
+            // let result = self.endpoint(route._dest);
+            // if result.is_some() {
+            //     let end_out = &mut result.unwrap();
+            //     end_out.send(env_out);
+            // } else {
+            //     warn!("{} not a valid endpoint address", route._dest);
+            // }
         }
         info!("{}","SEDA MessageBus stopped");
     }

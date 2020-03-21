@@ -1,4 +1,4 @@
-use std::sync::mpsc::{channel, Sender, Receiver, RecvError, SendError};
+use std::sync::mpsc::{channel, Sender, Receiver};
 use ra_common::models::{Consumer,Envelope,Producer};
 /// A Channel with Sender and Receiver
 #[derive(Debug)]
@@ -22,10 +22,6 @@ impl MessageChannel {
 impl Producer for MessageChannel {
     fn send(&mut self, env: Box<Envelope>) {
         if self._accepting {
-            // loop {
-            //     info!("{}","Sending...");
-            // wait::wait_a_ms(1000);
-            // }
             self._tx.send(env).unwrap();
         }
     }
