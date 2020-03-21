@@ -67,25 +67,36 @@ fn main() {
     let mut bus = MessageBus::new();
     let mut rec_1 = bus._ch_1._rx;
     let mut send_1 = bus._ch_1._tx;
+    let mut rec_2 = bus._ch_2._rx;
+    let mut send_2 = bus._ch_2._tx;
+    for n in 1..10 {
+        send_2.send(format!("Hello World 2: {}",n));
+    }
     thread::spawn(move || {
         loop {
-            let res = rec_1.recv_timeout(Duration::from_millis(1000));
+            let res = rec_1.recv_timeout(Duration::from_millis(100));
             if res.is_ok() {
                 info!("{}", res.unwrap());
-            } else {
-                info!("{}", ".");
             }
         }
     });
-    // for n in 1..10 {
-    //     bus.send(2, format!("Hello World 2: {}",n));
-    // }
-    for n in 1..20 {
+    thread::spawn(move || {
+        loop {
+            let res = rec_2.recv_timeout(Duration::from_millis(100));
+            if res.is_ok() {
+                info!("{}", res.unwrap());
+            }
+        }
+    });
+    for n in 1..10 {
         send_1.send(format!("Hello World 1: {}",n));
     }
     thread::sleep(Duration::from_secs(5));
-    for n in 21..100 {
+    for n in 10..20 {
         send_1.send(format!("Hello World 1: {}",n));
+    }
+    for n in 10..20 {
+        send_2.send(format!("Hello World 2: {}",n));
     }
     thread::sleep(Duration::from_secs(5));
     trace!("SED Bus Stopped.");
