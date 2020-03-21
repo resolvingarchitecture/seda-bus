@@ -7,6 +7,21 @@ use std::collections::HashMap;
 use std::thread;
 use std::time::Duration;
 
+pub struct Consumer {
+    _name: String
+}
+
+impl Consumer {
+    pub fn new(name: String) -> Box<Consumer> {
+        Box::new(Consumer {
+            _name: name
+        })
+    }
+    pub fn receive(&self, msg: String) {
+        info!("{}: {}",self._name, msg);
+    }
+}
+
 pub struct MessageChannel {
     pub _accepting: bool,
     pub _tx: Sender<String>,
@@ -22,53 +37,19 @@ impl MessageChannel {
             _rx: rx
         })
     }
-    fn send(&mut self, env: String) {
-        self._tx.send(env).unwrap();
-    }
-    fn receive(&mut self) -> Result<String,RecvTimeoutError> {
-        info!("{}",".");
-        self._rx.recv_timeout(Duration::from_millis(1000))
-    }
-}
-
-pub struct MessageBus {
-    _ch_1: Box<MessageChannel>,
-    _ch_2: Box<MessageChannel>
-}
-
-impl MessageBus {
-    pub fn new() -> Box<MessageBus> {
-        Box::new(MessageBus {
-            _ch_1: MessageChannel::new(),
-            _ch_2: MessageChannel::new()
-        })
-    }
-
-    pub fn send(&mut self, to_addr: u64, msg: String) {
-        match to_addr {
-            1 => self._ch_1.send(msg),
-            2 => self._ch_2.send(msg),
-            _ => warn!("No channel registered at address {}",to_addr)
-        }
-    }
-
-    pub fn recv(&mut self, from_addr: u64) -> Result<String,RecvTimeoutError> {
-        match from_addr {
-            1 => self._ch_1.receive(),
-            2 => self._ch_2.receive(),
-            _ => Ok(String::from("None"))
-        }
-    }
 }
 
 fn main() {
     simple_logger::init().unwrap();
     trace!("Starting SEDA Bus...");
-    let mut bus = MessageBus::new();
-    let mut rec_1 = bus._ch_1._rx;
-    let mut send_1 = bus._ch_1._tx;
-    let mut rec_2 = bus._ch_2._rx;
-    let mut send_2 = bus._ch_2._tx;
+    let mut c_1 = Consumer::new(String::from("Consumer 1"));
+    let mut c_2 = Consumer::new(String::from("Consumer 2"));
+    let mut ch_1 = MessageChannel::new();
+    let mut ch_2 = MessageChannel::new();
+    let mut rec_1 = ch_1._rx;
+    let mut send_1 = ch_1._tx;
+    let mut rec_2 = ch_2._rx;
+    let mut send_2 = ch_2._tx;
     for n in 1..10 {
         send_2.send(format!("Hello World 2: {}",n));
     }
@@ -76,7 +57,7 @@ fn main() {
         loop {
             let res = rec_1.recv_timeout(Duration::from_millis(100));
             if res.is_ok() {
-                info!("{}", res.unwrap());
+                c_1.receive(res.unwrap());
             }
         }
     });
@@ -84,20 +65,20 @@ fn main() {
         loop {
             let res = rec_2.recv_timeout(Duration::from_millis(100));
             if res.is_ok() {
-                info!("{}", res.unwrap());
+                c_2.receive(res.unwrap());
             }
         }
     });
     for n in 1..10 {
         send_1.send(format!("Hello World 1: {}",n));
     }
-    thread::sleep(Duration::from_secs(5));
+    thread::sleep(Duration::from_secs(1));
     for n in 10..20 {
         send_1.send(format!("Hello World 1: {}",n));
     }
     for n in 10..20 {
         send_2.send(format!("Hello World 2: {}",n));
     }
-    thread::sleep(Duration::from_secs(5));
+    thread::sleep(Duration::from_secs(1));
     trace!("SED Bus Stopped.");
 }
