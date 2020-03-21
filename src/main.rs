@@ -96,12 +96,10 @@ fn main() {
 
     for n in 1..10 {
         let env = Envelope::new(2, format!("Hello World 2: {}",n));
-        // send_2.send(env._msg);
         r.route(env);
     }
     for n in 1..10 {
         let env = Envelope::new(1, format!("Hello World 1: {}",n));
-        // send_1.send(env._msg);
         r.route(env);
     }
     thread::spawn(move || {
@@ -122,13 +120,11 @@ fn main() {
     });
     for n in 10..20 {
         let env = Envelope::new(1, format!("Hello World 1: {}",n));
-        // send_1.send(env._msg);
         r.route(env);
     }
     thread::sleep(Duration::from_secs(1));
     for n in 10..20 {
         let env = Envelope::new(2, format!("Hello World 2: {}",n));
-        // send_2.send(env._msg);
         r.route(env);
     }
 
