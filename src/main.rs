@@ -31,16 +31,16 @@ impl Consumer {
             _id: id
         })
     }
-    pub fn receive(&self, msg: String) {
-        info!("Consumer {}: {}",self._id, msg);
+    pub fn receive(&self, env: Box<Envelope>) {
+        info!("Consumer {}: {}",self._id, env._msg);
     }
 }
 
 pub struct MessageChannel {
     pub _accepting: bool,
     pub _addr: u64,
-    pub _tx: Sender<String>,
-    pub _rx: Receiver<String>
+    pub _tx: Sender<Box<Envelope>>,
+    pub _rx: Receiver<Box<Envelope>>
 }
 
 impl MessageChannel {
@@ -56,12 +56,12 @@ impl MessageChannel {
 }
 
 pub struct Router {
-    _send_1: Sender<String>,
-    _send_2: Sender<String>
+    _send_1: Sender<Box<Envelope>>,
+    _send_2: Sender<Box<Envelope>>
 }
 
 impl Router {
-    pub fn new(send_1: Sender<String>, send_2: Sender<String>) -> Box<Router> {
+    pub fn new(send_1: Sender<Box<Envelope>>, send_2: Sender<Box<Envelope>>) -> Box<Router> {
         Box::new(Router {
             _send_1: send_1,
             _send_2: send_2
@@ -69,9 +69,9 @@ impl Router {
     }
     pub fn route(&mut self, env: Box<Envelope>) {
         if env._to_addr == 1 {
-            self._send_1.send(env._msg);
+            self._send_1.send(env);
         } else if env._to_addr == 2 {
-            self._send_2.send(env._msg);
+            self._send_2.send(env);
         } else {
             warn!("address {} has no channel",env._to_addr);
         }
