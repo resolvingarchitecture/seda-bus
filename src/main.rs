@@ -2,13 +2,15 @@ extern crate log;
 extern crate simple_logger;
 
 use log::{trace,info,warn};
-use std::sync::mpsc::{channel, Sender, Receiver};
+use std::sync::mpsc::{channel, Sender, Receiver, RecvError, RecvTimeoutError};
 use std::collections::HashMap;
+use std::thread;
+use std::time::Duration;
 
 pub struct MessageChannel {
-    _accepting: bool,
-    _tx: Sender<String>,
-    _rx: Receiver<String>
+    pub _accepting: bool,
+    pub _tx: Sender<String>,
+    pub _rx: Receiver<String>
 }
 
 impl MessageChannel {
@@ -23,8 +25,9 @@ impl MessageChannel {
     fn send(&mut self, env: String) {
         self._tx.send(env).unwrap();
     }
-    fn receive(&mut self) -> String {
-        self._rx.recv().unwrap()
+    fn receive(&mut self) -> Result<String,RecvTimeoutError> {
+        info!("{}",".");
+        self._rx.recv_timeout(Duration::from_millis(1000))
     }
 }
 
@@ -49,11 +52,11 @@ impl MessageBus {
         }
     }
 
-    pub fn recv(&mut self, from_addr: u64) -> String {
+    pub fn recv(&mut self, from_addr: u64) -> Result<String,RecvTimeoutError> {
         match from_addr {
             1 => self._ch_1.receive(),
             2 => self._ch_2.receive(),
-            _ => String::from("None")
+            _ => Ok(String::from("None"))
         }
     }
 }
@@ -62,8 +65,28 @@ fn main() {
     simple_logger::init().unwrap();
     trace!("Starting SEDA Bus...");
     let mut bus = MessageBus::new();
-    bus.send(1, String::from("Hello World"));
-    let msg = bus.recv(1);
-    info!("{}",msg);
+    let mut rec_1 = bus._ch_1._rx;
+    let mut send_1 = bus._ch_1._tx;
+    thread::spawn(move || {
+        loop {
+            let res = rec_1.recv_timeout(Duration::from_millis(1000));
+            if res.is_ok() {
+                info!("{}", res.unwrap());
+            } else {
+                info!("{}", ".");
+            }
+        }
+    });
+    // for n in 1..10 {
+    //     bus.send(2, format!("Hello World 2: {}",n));
+    // }
+    for n in 1..20 {
+        send_1.send(format!("Hello World 1: {}",n));
+    }
+    thread::sleep(Duration::from_secs(5));
+    for n in 21..100 {
+        send_1.send(format!("Hello World 1: {}",n));
+    }
+    thread::sleep(Duration::from_secs(5));
     trace!("SED Bus Stopped.");
 }
