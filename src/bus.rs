@@ -4,7 +4,7 @@ use rand::{RngCore};
 use futures::{executor, Future};
 
 use crate::endpoint::MessageEndpoint;
-use ra_common::models::{Consumer,Envelope,LifeCycle,Producer,Route};
+use ra_common::models::{Consumer,Envelope,Producer,Route};
 
 const MAXIMUM_CAPACITY: usize = 10;
 
@@ -42,47 +42,4 @@ impl MessageBus {
         self._endpoints.len()
     }
 
-}
-
-impl LifeCycle for MessageBus {
-    fn start(&mut self) {
-        info!("{}","SEDA MessageBus starting...");
-        info!("{} Endpoints", self._endpoints.len());
-        self._running = true;
-        info!("{}","SEDA MessageBus initializing...");
-        for end_in in &mut self._endpoints {
-            info!("receiving on endpoint: {:#?}", end_in);
-            let env_out = end_in.receive();
-            info!("received envelope: {:#?}", env_out);
-            let route = env_out.slip.current_route().unwrap();
-            // let result = self.endpoint(route._dest);
-            // if result.is_some() {
-            //     let end_out = &mut result.unwrap();
-            //     end_out.send(env_out);
-            // } else {
-            //     warn!("{} not a valid endpoint address", route._dest);
-            // }
-        }
-        info!("{}","SEDA MessageBus stopped");
-    }
-
-    fn restart(&mut self) {
-        unimplemented!()
-    }
-
-    fn pause(&mut self) {
-        unimplemented!()
-    }
-
-    fn unpause(&mut self) {
-        unimplemented!()
-    }
-
-    fn stop(&mut self) {
-        self._running = false;
-    }
-
-    fn graceful_stop(&mut self) {
-        self._running = false;
-    }
 }

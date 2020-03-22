@@ -1,6 +1,6 @@
 [package]
 name = "seda_bus"
-version = "0.0.14"
+version = "0.0.15"
 authors = ["Brian Taylor <brian@resolvingarchitecture.io>"]
 license-file = "LICENSE"
 edition = "2018"
@@ -23,7 +23,7 @@ futures = "0.3.4"
 #dbus = "0.8.1"
 #scheduled-thread-pool = "0.2.3"
 
-ra_common = "0.0.31"
+ra_common = "0.0.32"
 
 [dev-dependencies]
 assert_cmd = "0.10"
