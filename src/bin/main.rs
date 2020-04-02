@@ -1,13 +1,10 @@
 extern crate log;
 extern crate simple_logger;
 
-use log::{trace,info,warn};
-use std::sync::mpsc::{channel, Sender, Receiver, RecvError, RecvTimeoutError};
-use std::collections::HashMap;
+use log::{trace,info};
 use std::thread;
 use std::time::Duration;
-use seda_bus::{MessageChannel, Bus, Envelope};
-
+use seda_bus::{Bus, Envelope};
 
 fn main() {
     simple_logger::init().unwrap();

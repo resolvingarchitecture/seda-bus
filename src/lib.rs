@@ -1,11 +1,9 @@
 extern crate log;
 
-use log::{trace,info,warn};
-use std::sync::mpsc::{channel, Sender, Receiver, RecvError, RecvTimeoutError, SendError};
+use log::{info};
+use std::sync::mpsc::{channel, Sender, Receiver};
 use std::collections::HashMap;
-use std::thread;
 use std::time::Duration;
-use std::fmt::Error;
 
 #[derive(Clone)]
 pub struct Envelope {
@@ -20,7 +18,6 @@ impl Envelope {
 }
 
 pub struct MessageChannel {
-    pub accepting: bool,
     pub addr: u64,
     pub tx: Sender<Envelope>,
     pub rx: Receiver<Envelope>
@@ -29,7 +26,7 @@ pub struct MessageChannel {
 impl MessageChannel {
     pub fn new(addr: u64) -> MessageChannel {
         let (tx, rx) = channel();
-        MessageChannel { accepting: true, addr, tx, rx }
+        MessageChannel { addr, tx, rx }
     }
 }
 
@@ -57,7 +54,7 @@ impl Bus {
             Some(ch) => {
                 match ch.tx.send(env) {
                     Ok(()) => true,
-                    Err(e) => false
+                    Err(_) => false
                 }
             },
             None => false
@@ -68,7 +65,7 @@ impl Bus {
             Some(ch) => {
                 match ch.rx.recv_timeout(Duration::from_millis(100)) {
                     Ok(env) => Option::Some(env),
-                    Err(e) => Option::None
+                    Err(_) => Option::None
                 }
             },
             None => Option::None
