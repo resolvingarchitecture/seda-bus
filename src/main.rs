@@ -104,7 +104,7 @@ fn main() {
     }
     thread::spawn(move || {
         loop {
-            match rec_1.recv_timeout(Duration::from_millis(2000)) {
+            match rec_1.recv_timeout(Duration::from_millis(100)) {
                 Ok(env) => c_1.receive(env),
                 Err(e) => info!("{}","timedout")
             }
@@ -112,7 +112,7 @@ fn main() {
     });
     thread::spawn(move || {
         loop {
-            match rec_2.recv_timeout(Duration::from_millis(2000)) {
+            match rec_2.recv_timeout(Duration::from_millis(100)) {
                 Ok(env) => c_2.receive(env),
                 Err(e) => info!("{}","timedout")
             }

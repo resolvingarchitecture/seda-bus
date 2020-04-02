@@ -12,8 +12,8 @@ logic which results in mappings to the lower message bus address.
 
 ## Design Goals 
 
-* place the burden of queue checks on the clients for maximum scalability
-* non-persistence of messages for deniability
+* place the burden of queue checks on the clients (if possible) for maximum scalability
+* non-persistence of messages for deniability by default
 * mark messages as consumed on consumption so that clients can continue on if synchronous
 * mark messages as completed on completion so that clients know when they can clear the queue if they wish
 * mark messages as errored with code on error so that clients can determine how they wish to handle it
