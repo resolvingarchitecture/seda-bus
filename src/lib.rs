@@ -5,7 +5,6 @@ use std::sync::mpsc::{channel, Sender, Receiver};
 use std::collections::HashMap;
 use std::time::Duration;
 
-#[derive(Clone)]
 pub struct Envelope {
     pub to: u64,
     pub msg: String
