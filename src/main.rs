@@ -61,11 +61,11 @@ pub struct Router {
 }
 
 impl Router {
-    pub fn new(send_1: Sender<Envelope>, send_2: Sender<Envelope>) -> Box<Router> {
-        Box::new(Router {
+    pub fn new(send_1: Sender<Envelope>, send_2: Sender<Envelope>) -> Router {
+        Router {
             _send_1: send_1,
             _send_2: send_2
-        })
+        }
     }
     pub fn route(&mut self, env: Envelope) {
         if env._to_addr == 1 {
@@ -104,17 +104,17 @@ fn main() {
     }
     thread::spawn(move || {
         loop {
-            let res = rec_1.recv_timeout(Duration::from_millis(100));
-            if res.is_ok() {
-                c_1.receive(res.unwrap());
+            match rec_1.recv_timeout(Duration::from_millis(2000)) {
+                Ok(env) => c_1.receive(env),
+                Err(e) => info!("{}","timedout")
             }
         }
     });
     thread::spawn(move || {
         loop {
-            let res = rec_2.recv_timeout(Duration::from_millis(100));
-            if res.is_ok() {
-                c_2.receive(res.unwrap());
+            match rec_2.recv_timeout(Duration::from_millis(2000)) {
+                Ok(env) => c_2.receive(env),
+                Err(e) => info!("{}","timedout")
             }
         }
     });
