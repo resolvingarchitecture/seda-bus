@@ -33,13 +33,13 @@ impl MessageChannel {
     }
 }
 
-pub struct Router {
+pub struct Bus {
     channels: HashMap<u64,MessageChannel>
 }
 
-impl Router {
-    pub fn new() -> Router {
-        Router {
+impl Bus {
+    pub fn new() -> Bus {
+        Bus {
             channels: HashMap::new()
         }
     }
