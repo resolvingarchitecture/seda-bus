@@ -5,6 +5,7 @@ use std::sync::mpsc::{channel, Sender, Receiver, RecvError, RecvTimeoutError, Se
 use std::collections::HashMap;
 use std::thread;
 use std::time::Duration;
+use std::fmt::Error;
 
 #[derive(Clone)]
 pub struct Envelope {
@@ -51,6 +52,17 @@ impl Router {
             self.channels.insert(addr[i], MessageChannel::new(addr[i]));
         }
     }
+    pub fn send(&mut self, env: Envelope) -> bool {
+        match self.channels.get(&env.to) {
+            Some(ch) => {
+                match ch.tx.send(env) {
+                    Ok(()) => true,
+                    Err(e) => false
+                }
+            },
+            None => false
+        }
+    }
     pub fn poll(&mut self, addr: u64) -> Option<Envelope> {
         match self.channels.get(&addr) {
             Some(ch) => {
@@ -60,17 +72,6 @@ impl Router {
                 }
             },
             None => Option::None
-        }
-    }
-    pub fn route(&mut self, env: Envelope) -> bool {
-        match self.channels.get(&env.to) {
-            Some(ch) => {
-                match ch.tx.send(env) {
-                    Ok(()) => true,
-                    Err(e) => false
-                }
-            },
-            None => false
         }
     }
 }

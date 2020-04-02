@@ -12,24 +12,26 @@ use seda_bus::{MessageChannel, Router, Envelope};
 fn main() {
     simple_logger::init().unwrap();
     trace!("Starting SEDA Bus...");
+    let addr :u64 = 12;
 
     let mut r = Router::new();
-    r.register(12);
+    r.register(addr);
 
     for n in 1..10 {
         let env = Envelope::new(12, format!("Hello World 12: {}",n));
-        r.route(env);
+        r.send(env);
     }
+
     thread::spawn( move || {
-        let addr :u64 = 12;
         loop {
             match r.poll(addr) {
                 Some(env) => info!("env to={} msg={}", env.to, env.msg),
-                None => info!("No msg for addr: {}", addr)
+                None => info!("x")
             }
         }
     });
 
     thread::sleep(Duration::from_secs(1));
+
     trace!("SED Bus Stopped.");
 }
