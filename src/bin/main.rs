@@ -9,20 +9,21 @@ use seda_bus::{MessageBus, Envelope};
 fn main() {
     simple_logger::init().unwrap();
     trace!("Starting SEDA Bus...");
-    let addr :u64 = 12;
 
     let mut bus = MessageBus::new();
-    bus.register(addr);
+    let from = bus.register();
+    let to = bus.register();
 
     for n in 1..10 {
-        let env = Envelope::new(11,12, format!("Hello 12: {}",n));
+        let mut msg = format!("Hello 12: {}",n);
+        let env = Envelope::new(from,to, msg.into_bytes());
         bus.send(env);
     }
 
     thread::spawn( move || {
         loop {
-            match bus.poll_wait(addr, 100) {
-                Some(env) => info!("env from={} to={} msg={}", env.from, env.to, env.msg),
+            match bus.poll_wait(to, 100) {
+                Some(env) => info!("env from={} to={} msg={}", env.from, env.to, String::from_utf8(env.msg).unwrap()),
                 None => info!("x")
             }
         }
