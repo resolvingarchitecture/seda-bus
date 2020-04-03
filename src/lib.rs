@@ -63,7 +63,18 @@ impl Bus {
     pub fn poll(&mut self, addr: u64) -> Option<Envelope> {
         match self.channels.get(&addr) {
             Some(ch) => {
-                match ch.rx.recv_timeout(Duration::from_millis(100)) {
+                match ch.rx.try_recv() {
+                    Ok(env) => Option::Some(env),
+                    Err(_) => Option::None
+                }
+            },
+            None => Option::None
+        }
+    }
+    pub fn poll_wait(&mut self, addr: u64, wait: u64) -> Option<Envelope> {
+        match self.channels.get(&addr) {
+            Some(ch) => {
+                match ch.rx.recv_timeout(Duration::from_millis(wait)) {
                     Ok(env) => Option::Some(env),
                     Err(_) => Option::None
                 }

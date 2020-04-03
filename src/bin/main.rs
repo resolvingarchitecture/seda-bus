@@ -21,7 +21,7 @@ fn main() {
 
     thread::spawn( move || {
         loop {
-            match bus.poll(addr) {
+            match bus.poll_wait(addr, 100) {
                 Some(env) => info!("env from={} to={} msg={}", env.from, env.to, env.msg),
                 None => info!("x")
             }
