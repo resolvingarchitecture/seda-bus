@@ -15,9 +15,7 @@ fn main() {
     let to = bus.register();
 
     for n in 1..10 {
-        let mut msg = format!("Hello 12: {}",n);
-        let env = Envelope::new(from,to, msg.into_bytes());
-        bus.send(env);
+        bus.send(Envelope::new(from,to, format!("Hello 12: {}",n).into_bytes()));
     }
 
     thread::spawn( move || {
