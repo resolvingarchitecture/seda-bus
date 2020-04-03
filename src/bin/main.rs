@@ -4,7 +4,8 @@ extern crate simple_logger;
 use log::{trace,info};
 use std::thread;
 use std::time::Duration;
-use seda_bus::{MessageBus, Envelope};
+use seda_bus::{MessageBus};
+use ra_common::models::Envelope;
 
 fn main() {
     simple_logger::init().unwrap();

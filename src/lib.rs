@@ -1,19 +1,8 @@
 use std::sync::mpsc::{channel, Sender, Receiver};
 use std::collections::HashMap;
 use std::time::Duration;
+use ra_common::models::Envelope;
 
-/// An Envelope is a wrapper of data with some meta-data for internal routing.
-pub struct Envelope {
-    pub from: u8,
-    pub to: u8,
-    pub msg: Vec<u8>
-}
-
-impl Envelope {
-    pub fn new(from: u8, to: u8, msg: Vec<u8>) -> Envelope {
-        Envelope { from, to, msg }
-    }
-}
 
 pub struct MessageChannel {
     pub addr: u8,
