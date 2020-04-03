@@ -4,14 +4,14 @@ extern crate simple_logger;
 use log::{trace,info};
 use std::thread;
 use std::time::Duration;
-use seda_bus::{Bus, Envelope};
+use seda_bus::{MessageBus, Envelope};
 
 fn main() {
     simple_logger::init().unwrap();
     trace!("Starting SEDA Bus...");
     let addr :u64 = 12;
 
-    let mut bus = Bus::new();
+    let mut bus = MessageBus::new();
     bus.register(addr);
 
     for n in 1..10 {
