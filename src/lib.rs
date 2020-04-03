@@ -6,13 +6,14 @@ use std::collections::HashMap;
 use std::time::Duration;
 
 pub struct Envelope {
+    pub from: u64,
     pub to: u64,
     pub msg: String
 }
 
 impl Envelope {
-    pub fn new(to: u64, msg: String) -> Envelope {
-        Envelope { to, msg }
+    pub fn new(from: u64, to: u64, msg: String) -> Envelope {
+        Envelope { from, to, msg }
     }
 }
 

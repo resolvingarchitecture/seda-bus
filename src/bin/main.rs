@@ -15,14 +15,14 @@ fn main() {
     bus.register(addr);
 
     for n in 1..10 {
-        let env = Envelope::new(12, format!("Hello World 12: {}",n));
+        let env = Envelope::new(11,12, format!("Hello 12: {}",n));
         bus.send(env);
     }
 
     thread::spawn( move || {
         loop {
             match bus.poll(addr) {
-                Some(env) => info!("env to={} msg={}", env.to, env.msg),
+                Some(env) => info!("env from={} to={} msg={}", env.from, env.to, env.msg),
                 None => info!("x")
             }
         }
