@@ -1,6 +1,3 @@
-extern crate log;
-
-use log::{info};
 use std::sync::mpsc::{channel, Sender, Receiver};
 use std::collections::HashMap;
 use std::time::Duration;
