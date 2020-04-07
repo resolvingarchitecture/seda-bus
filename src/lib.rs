@@ -32,6 +32,9 @@ impl MessageBus {
         self.channels.insert(id, MessageChannel::new(id));
         id
     }
+    pub fn unregister(&mut self, id: u8) -> bool {
+        self.channels.remove(&id).is_some()
+    }
     pub fn send(&mut self, env: Envelope) -> bool {
         match self.channels.get(&env.to) {
             Some(ch) => {
