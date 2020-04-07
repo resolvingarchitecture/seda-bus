@@ -1,11 +1,49 @@
-[![Build Status](https://travis-ci.com/resolvingarchitecture/seda-bus.svg?branch=master)](https://travis-ci.com/resolvingarchitecture/seda-bus)
-# Staged Event-Driven Architecture (SEDA) Bus
-A form of message bus avoiding the high overhead of thread-based concurrency models where channels get their own inbound and outbound queues. 
-When used in conjunction with the [Service Bus](https://github.com/resolvingarchitecture/service-bus), 
-the service bus acts as a layer above the message bus driving routing based on service operations and/or other 
-logic which results in mappings to the lower message bus address.
+<div align="center">
+  <img src="https://resolvingarchitecture.io/images/ra.png"  />
 
-[Crates.io](https://crates.io/crates/seda_bus)
+  <h1>Resolving Architecture</h1>
+
+  <p>
+    <strong>Clarity in Design</strong>
+  </p>
+  
+  <h2>SEDA Bus</h2>
+  
+  <p>
+   Staged Event-Driven Architecture Bus - A form of message bus avoiding the high overhead of thread-based concurrency models where channels get their own inbound and outbound queues. 
+  </p>
+  
+  <p>
+    <a href="https://travis-ci.com/resolvingarchitecture/seda-bus"><img alt="build" src="https://img.shields.io/travis/resolvingarchitecture/seda-bus"/></a>
+    <a href="https://crates.io/crates/seda-bus"><img alt="Crate Info" src="https://img.shields.io/crates/v/seda-bus.svg"/></a>
+    <a href="https://docs.rs/crate/seda-bus/"><img alt="API Docs" src="https://img.shields.io/badge/docs.seda-bus-green"/></a>
+  </p>
+  <p>
+    <a href="https://github.com/resolvingarchitecture/seda-bus/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/resolvingarchitecture/seda-bus"/></a>
+    <a href="https://resolvingarchitecture.io/ks/publickey.brian@resolvingarchitecture.io.asc"><img alt="PGP" src="https://img.shields.io/keybase/pgp/objectorange"/></a>
+  </p>
+  <p>
+    <img alt="commits" src="https://img.shields.io/crates/d/seda-bus"/>
+    <img alt="repo size" src="https://img.shields.io/github/repo-size/resolvingarchitecture/seda-bus"/>
+  </p>
+  <p>
+    <img alt="num lang" src="https://img.shields.io/github/languages/count/resolvingarchitecture/seda-bus"/>
+    <img alt="top lang" src="https://img.shields.io/github/languages/top/resolvingarchitecture/seda-bus"/>
+    <a href="https://blog.rust-lang.org/2020/03/12/Rust-1.42.html"><img alt="Rustc Version 1.42+" src="https://img.shields.io/badge/rustc-1.42+-green.svg"/></a>
+  </p>
+
+  <h4>
+    <a href="https://resolvingarchitecture.io">Info</a>
+    <span> | </span>
+    <a href="https://docs.rs/crate/seda-bus/">Docs</a>
+    <span> | </span>
+    <a href="https://github.com/resolvingarchitecture/seda-bus/blob/master/CHANGELOG.md">Changelog</a>
+  </h4>
+</div>
+
+## Donate
+Request BTC/XMR/ZEC address for a donation at brian@resolvingarchitecture.io.
+
 
 !! WIP - not stable until version 1.0 !!
 
