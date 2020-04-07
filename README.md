@@ -11,19 +11,20 @@ logic which results in mappings to the lower message bus address.
 
 ## Design Goals 
 
-* non-persistence of messages for deniability by default
-* mark messages as consumed on consumption so that clients can continue on if synchronous
-* mark messages as completed on completion so that clients know when they can clear the queue if they wish
-* mark messages as errored with code on error so that clients can determine how they wish to handle it
-* use [dbus](https://en.wikipedia.org/wiki/D-Bus) for inter-process communications on Linux
-* use [ipcd](https://dev.to/legolord208/programming-for-redox-os-4124) for inter-process communications on RedoxOS
+*[x] non-persistence of messages for deniability by default
+*[ ] mark messages as consumed on consumption so that clients can continue on if synchronous
+*[ ] mark messages as completed on completion so that clients know when they can clear the queue if they wish
+*[ ] mark messages as errored with code on error so that clients can determine how they wish to handle it
+*[ ] use [dbus](https://en.wikipedia.org/wiki/D-Bus) for inter-process communications on Linux
+*[ ] use [ipcd](https://dev.to/legolord208/programming-for-redox-os-4124) for inter-process communications on RedoxOS
 
 ## Functionality
 
 ### lib.rs
-1. Start Message Bus up with a name - Message bus instance creates a thread pool with Max Capacity of threads.
-2. Create Endpoints as needed using Message Bus.
-3. Start Message Bus
+1. Start Bus
+2. Register Endpoints as needed using Bus receiving Id
+3. Send Envelopes
+4. Poll with Ids
 
 ### main.rs
 1. cargo install seda_bus
