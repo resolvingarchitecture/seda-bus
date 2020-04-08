@@ -44,7 +44,7 @@
 ## Donate
 Request BTC/XMR/ZEC address for a donation at brian@resolvingarchitecture.io.
 
-
+## Notes
 !! WIP - not stable until version 1.0 !!
 
 ## Design Goals 
