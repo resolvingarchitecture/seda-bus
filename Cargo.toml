@@ -1,6 +1,6 @@
 [package]
 name = "seda_bus"
-version = "0.1.11"
+version = "0.1.12"
 authors = ["Brian Taylor <brian@resolvingarchitecture.io>"]
 license-file = "LICENSE"
 edition = "2018"
