@@ -47,27 +47,37 @@ Request BTC/XMR/ZEC address for a donation at brian@resolvingarchitecture.io.
 ## Notes
 !! WIP - not stable until version 1.0 !!
 
-## Design Goals 
+## Roadmap 
 
-*[x] non-persistence of messages for deniability by default
-*[ ] mark messages as consumed on consumption so that clients can continue on if synchronous
-*[ ] mark messages as completed on completion so that clients know when they can clear the queue if they wish
-*[ ] mark messages as errored with code on error so that clients can determine how they wish to handle it
-*[ ] use [dbus](https://en.wikipedia.org/wiki/D-Bus) for inter-process communications on Linux
-*[ ] use [ipcd](https://dev.to/legolord208/programming-for-redox-os-4124) for inter-process communications on RedoxOS
+*[ ] 1.0.0 - Minimal Stable Useful Functionality
+    *[x] 0.1.0 - send/receive non-persistent messages between two channels
+    *[ ] 0.2.0 - provide optional guaranteed delivery at the message level
+*[ ] 2.0.0 - use [dbus](https://en.wikipedia.org/wiki/D-Bus) for inter-process communications on Linux
+*[ ] 3.0.0 - use [ipcd](https://dev.to/legolord208/programming-for-redox-os-4124) for inter-process communications on RedoxOS
 
-## Functionality
+[Crates.io](https://crates.io/crates/seda_bus)
 
-### lib.rs
-1. Start Bus
-2. Register Endpoints as needed using Bus receiving Id
-3. Send Envelopes
-4. Poll with Ids
+!! WIP - not stable until version 1.0 !!
 
-### main.rs
-1. cargo install seda_bus
-2. copy seda_bus file to: /etc/init.d/seda_bus
-3. chmod +x /etc/init.d/seda_bus -v
-4. service seda_bus start
+## Setup - Ubuntu 18.04
+1. Install Rust
+   ```shell script
+   sudo apt update
+   sudo apt upgrade
+   curl https://sh.rustup.rs -sSf | sh
+   ```
+2. Restart terminal
+3. Verify Rust installed
+    ```shell script
+     rustc --version
+    ```
+4. Install build essentials
+    ```shell script
+    sudo apt install build-essential
+    ```
+5. install crate
+    ```shell script
+    cargo install seda_bus
+    ```
 
    
