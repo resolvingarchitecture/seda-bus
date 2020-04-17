@@ -18,12 +18,14 @@ impl MessageChannel {
 }
 
 pub struct MessageBus {
+    name: String,
     channels: HashMap<u8,MessageChannel>
 }
 
 impl MessageBus {
-    pub fn new() -> MessageBus {
+    pub fn new(name: String) -> MessageBus {
         MessageBus {
+            name,
             channels: HashMap::new()
         }
     }

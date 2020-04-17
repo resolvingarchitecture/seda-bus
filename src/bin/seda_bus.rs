@@ -9,9 +9,9 @@ use ra_common::models::Envelope;
 
 fn main() {
     simple_logger::init().unwrap();
-    trace!("Starting SEDA Bus...");
+    trace!("Starting RA SEDA Bus...");
 
-    let mut bus = MessageBus::new();
+    let mut bus = MessageBus::new(String::from("ra"));
     let from = bus.register();
     let to = bus.register();
 
