@@ -21,7 +21,7 @@ LOGFILE="/var/log/${NAME}.log"
 # binary path
 DAEMON="/usr/bin/seda_bus"
 
-# Path of your php script
+# Path of your script
 DAEMON_OPTS="--persist-queues=false"
 
 START_OPTS="--start --background --make-pidfile --pidfile ${PIDFILE} --exec ${DAEMON} ${DAEMON_OPTS}"

@@ -2,7 +2,32 @@ use std::sync::mpsc::{channel, Sender, Receiver};
 use std::collections::HashMap;
 use std::time::Duration;
 use ra_common::models::Envelope;
+use std::io::{Error, ErrorKind};
 
+#[derive(Debug, Copy, Clone)]
+pub enum BusType {
+    Internal,
+    DBus,
+    IPCD
+}
+
+impl BusType {
+    pub fn as_string(&self) -> &'static str {
+        match *self {
+            BusType::Internal => "Internal",
+            BusType::DBus => "DBus",
+            BusType::IPCD => "IPCD"
+        }
+    }
+    pub fn from_str(sig_type: &str) -> Result<Self, Error> {
+        match sig_type {
+            "Internal" => Ok(BusType::Internal),
+            "DBus" => Ok(BusType::DBus),
+            "IPCD" => Ok(BusType::IPCD),
+            _ => Result::Err(Error::new(ErrorKind::InvalidData, format!("BusType provided not supported: {}", sig_type)))
+        }
+    }
+}
 
 pub struct MessageChannel {
     pub addr: u8,
@@ -18,14 +43,16 @@ impl MessageChannel {
 }
 
 pub struct MessageBus {
+    b_type: BusType,
     name: String,
     channels: HashMap<u8,MessageChannel>
 }
 
 impl MessageBus {
-    pub fn new(name: String) -> MessageBus {
+    pub fn new(name: String, b_type: BusType) -> MessageBus {
         MessageBus {
             name,
+            b_type,
             channels: HashMap::new()
         }
     }
