@@ -51,7 +51,7 @@ Request BTC/XMR/ZEC address for a donation at brian@resolvingarchitecture.io.
 
 *[ ] 1.0.0 - Minimal Stable Useful Functionality
     *[x] 0.1.0 - send/receive non-persistent messages between two channels
-    *[ ] 0.2.0 - provide CLI
+    *[x] 0.2.0 - provide CLI
     *[ ] 0.3.0 - provide optional guaranteed delivery at the message level
 *[ ] 2.0.0 - use [dbus](https://en.wikipedia.org/wiki/D-Bus) for inter-process communications on Linux
 *[ ] 3.0.0 - use [ipcd](https://dev.to/legolord208/programming-for-redox-os-4124) for inter-process communications on RedoxOS
