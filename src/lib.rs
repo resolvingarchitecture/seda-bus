@@ -49,11 +49,21 @@ pub struct MessageBus {
 }
 
 impl MessageBus {
-    pub fn new(name: String, b_type: BusType) -> MessageBus {
-        MessageBus {
-            name,
-            b_type,
-            channels: HashMap::new()
+    pub fn new(name: String, b_type: BusType) -> Result<MessageBus,Error> {
+        match b_type {
+            BusType::Internal => {
+                Ok(MessageBus {
+                    name,
+                    b_type,
+                    channels: HashMap::new()
+                })
+            },
+            BusType::DBus => {
+                Err(Error::new(ErrorKind::NotFound, "DBus not yet implemented."))
+            },
+            BusType::IPCD => {
+                Err(Error::new(ErrorKind::NotFound, "IPCD not yet implemented."))
+            }
         }
     }
     pub fn register(&mut self) -> u8 {
