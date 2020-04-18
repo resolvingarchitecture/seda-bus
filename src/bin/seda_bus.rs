@@ -6,13 +6,36 @@ use std::{thread, env};
 use std::time::Duration;
 use seda_bus::{MessageBus, BusType};
 use ra_common::models::Envelope;
+use clap::{crate_version, App, AppSettings, Arg};
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let bus_name = &args[1];
-    let bus_type = BusType::from_str(&args[2]).unwrap();
-    println!("name: {}, type: {}", bus_name, bus_type.as_string());
     simple_logger::init().unwrap();
+    let m = App::new("seda_bus")
+        .about("Staged Event-Driven Architecture Bus - A form of message bus avoiding the high overhead of thread-based concurrency models where channels get their own inbound and outbound queues.")
+        .version(crate_version!())
+        .author("Brian Taylor <brian@resolvingarchitecture.io>")
+        .setting(AppSettings::ArgRequiredElseHelp)
+        .setting(AppSettings::ColoredHelp)
+        .setting(AppSettings::ColorAlways)
+        .arg(
+            Arg::with_name("name")
+                .help("The name of the bus to instantiate.")
+                .short("n")
+                .long("name")
+                .required(true)
+                .takes_value(true)
+        )
+        .arg(
+            Arg::with_name("type")
+                .help("Bus type: Internal (within this process), DBus (Linux OS), IPCD (Redox); only Internal currently supported.")
+                .short("t")
+                .long("type")
+                .required(true)
+                .takes_value(true)
+        )
+        .get_matches();
+    let bus_name = String::from(m.value_of("name").unwrap());
+    let bus_type = BusType::from_str(m.value_of("type").unwrap()).unwrap();
 
     match bus_type {
         BusType::Internal => {
