@@ -81,4 +81,9 @@ Request BTC/XMR/ZEC address for a donation at brian@resolvingarchitecture.io.
     cargo install seda_bus
     ```
 6. 
-   
+
+## Development
+
+### Links
+* https://github.com/diwic/dbus-rs
+* https://crates.io/crates/dbus
