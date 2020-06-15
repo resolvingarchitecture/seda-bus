@@ -2,32 +2,6 @@ use std::sync::mpsc::{channel, Sender, Receiver};
 use std::collections::HashMap;
 use std::time::Duration;
 use ra_common::models::Envelope;
-use std::io::{Error, ErrorKind};
-
-#[derive(Debug, Copy, Clone)]
-pub enum BusType {
-    Internal,
-    DBus,
-    IPCD
-}
-
-impl BusType {
-    pub fn as_string(&self) -> &'static str {
-        match *self {
-            BusType::Internal => "Internal",
-            BusType::DBus => "DBus",
-            BusType::IPCD => "IPCD"
-        }
-    }
-    pub fn from_str(sig_type: &str) -> Result<Self, Error> {
-        match sig_type {
-            "Internal" => Ok(BusType::Internal),
-            "DBus" => Ok(BusType::DBus),
-            "IPCD" => Ok(BusType::IPCD),
-            _ => Result::Err(Error::new(ErrorKind::InvalidData, format!("BusType provided not supported: {}", sig_type)))
-        }
-    }
-}
 
 pub struct MessageChannel {
     pub addr: u8,
@@ -43,29 +17,15 @@ impl MessageChannel {
 }
 
 pub struct MessageBus {
-    b_type: BusType,
     name: String,
     channels: HashMap<u8,MessageChannel>
 }
 
 impl MessageBus {
-    pub fn new(name: String, b_type: BusType) -> Result<MessageBus,Error> {
-        match b_type {
-            BusType::Internal => {
-                Ok(MessageBus {
-                    name,
-                    b_type,
-                    channels: HashMap::new()
-                })
-            },
-            BusType::DBus => {
-                Err(Error::new(ErrorKind::NotFound, "DBus not yet implemented."))
-            },
-            BusType::IPCD => {
-                Err(Error::new(ErrorKind::NotFound, "IPCD not yet implemented."))
-            }
-        }
+    pub fn new(name: String) -> MessageBus {
+        MessageBus { name, channels: HashMap::new() }
     }
+
     pub fn register(&mut self) -> u8 {
         let id :u8 = self.channels.len() as u8;
         self.channels.insert(id, MessageChannel::new(id));
