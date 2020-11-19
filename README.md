@@ -82,7 +82,7 @@ they're all just endpoints.
 
 Bringing together SEDA and Bus architectural patterns is what this component attempts.
 
-This component is implemented in [Java](https://github.com/resolvingarchitecture/seda-bus-java) and [Typescript](https://github.com/resolvingarchitecture/seda-bus-ts).
+This component is also implemented in [Java](https://github.com/resolvingarchitecture/seda-bus-java) and [Typescript](https://github.com/resolvingarchitecture/seda-bus-ts).
 This project is meant to support the design of the Java SEDA Bus in an implementation closer to the Linux/Redox Operating System
 for embedded projects. It may eventually support integration with each operating system's own messaging bus.
 
