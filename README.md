@@ -58,8 +58,6 @@ Request BTC address for a donation at brian@resolvingarchitecture.io.
 
 [Crates.io](https://crates.io/crates/seda_bus)
 
-!! WIP - not stable until version 1.0 !!
-
 ## Background
 Staged Event-Driven Architecture (SEDA) is an approach to software architecture that decomposes a complex,
 event-driven application into a set of stages connected by queues. It avoids the high overhead associated
