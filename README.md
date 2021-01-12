@@ -42,7 +42,7 @@
 </div>
 
 ## Donate
-Request BTC/XMR address for a donation at brian@resolvingarchitecture.io.
+Request BTC address for a donation at brian@resolvingarchitecture.io.
 
 ## Notes
 !! WIP - not stable until version 1.0 !!
